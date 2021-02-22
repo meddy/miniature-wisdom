@@ -1,0 +1,15 @@
+{
+  "name": "minature-wisdom",
+  "version": "0.0.1",
+  "priavte": true,
+  "description": "A very simple knowledge base app and database.",
+  "author": "Max Eddy",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "2.2.1"
+  },
+  "workspaces": [
+    "client",
+    "server"
+  ]
+}
