@@ -17,3 +17,5 @@ build
 .env.production.local
 
 npm-debug.log*
+
+db.sqlite
