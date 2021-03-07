@@ -1,5 +1,5 @@
 import readline from "readline";
-import db from "./db";
+import { findAdmin, upsertAdmin } from "./user";
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -26,9 +26,7 @@ const waitForValidAnswer = async (
 };
 
 (async () => {
-  const user = db
-    .prepare("SELECT rowid, * FROM users WHERE is_admin = 1")
-    .get();
+  const user = findAdmin();
 
   if (user) {
     const resetAdmin = await waitForValidAnswer(
@@ -50,15 +48,7 @@ const waitForValidAnswer = async (
     (answer) => answer.length > 0
   );
 
-  if (user) {
-    db.prepare(
-      "UPDATE users SET username = ?, password = ? WHERE rowid = ?"
-    ).run(username, password, user.rowid);
-  } else {
-    db.prepare(
-      "INSERT INTO users (username, password, is_admin) VALUES (?, ?, TRUE)"
-    ).run(username, password);
-  }
+  upsertAdmin(username, password, user ? user.rowid : null);
 
   rl.close();
 })();
