@@ -27,7 +27,6 @@ const waitForValidAnswer = async (
 
 (async () => {
   const user = findAdmin();
-
   if (user) {
     const resetAdmin = await waitForValidAnswer(
       "Reset Admin? y/n: ",
