@@ -1,8 +1,17 @@
 import crypto from "crypto";
 import db from "./db";
 
-export function findAdmin() {
-  return db.prepare("SELECT rowid, * FROM users WHERE is_admin = 1").get();
+export interface User {
+  id: number;
+  username: string;
+  password: string;
+  is_admin: boolean;
+}
+
+export function findAdmin(): User {
+  return db
+    .prepare("SELECT rowid AS id, * FROM users WHERE is_admin = 1")
+    .get();
 }
 
 export function upsertAdmin(
@@ -27,7 +36,7 @@ function hashPassword(password: string) {
   return `${salt}:${hash.toString("hex")}`;
 }
 
-function verifyPassword(password: string, storedHash: string) {
+export function verifyPassword(password: string, storedHash: string) {
   const [salt, hashedPassword] = storedHash.split(":");
   return (
     hashedPassword === crypto.scryptSync(password, salt, 64).toString("hex")

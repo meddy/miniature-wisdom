@@ -47,7 +47,7 @@ const waitForValidAnswer = async (
     (answer) => answer.length > 0
   );
 
-  upsertAdmin(username, password, user ? user.rowid : null);
+  upsertAdmin(username, password, user ? user.id : undefined);
 
   rl.close();
 })();
