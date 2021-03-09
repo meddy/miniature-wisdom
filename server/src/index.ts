@@ -1,7 +1,11 @@
+import crypto from "crypto";
 import express from "express";
+import https from "https";
+import fs from "fs";
 import path from "path";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import cookieSession from "cookie-session";
 
 import { User as LocalUser, findAdmin, verifyPassword } from "./user";
 
@@ -43,8 +47,22 @@ passport.deserializeUser((id, done) => {
 
 const app = express();
 app.use(express.static(path.resolve("../client/build")));
+app.use(
+  cookieSession({
+    secret:
+      process.env.NODE_ENV === "production"
+        ? crypto.randomBytes(64).toString("hex")
+        : "secret",
+    maxAge: 24 * 60 * 60 * 1000,
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.post(
+  "/sign-in",
+  passport.authenticate("local", { failureRedirect: "login" })
+);
 
 // create tag (name) (parent_id) (must be unique)
 // update tag (name) (must be unique)
@@ -67,6 +85,14 @@ app.use(passport.session());
 // create user on startup
 // or create user through cli
 
-app.listen(3001, () => {
-  console.log("server listening on 3001");
+const server = https.createServer(
+  {
+    key: fs.readFileSync(path.resolve("../certs/key.pem")),
+    cert: fs.readFileSync(path.resolve("../certs/cert.pem")),
+  },
+  app
+);
+
+server.listen(3001, () => {
+  console.log("server starting on 3001");
 });

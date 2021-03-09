@@ -1,5 +1,6 @@
 # editor
 .idea
+
 # dependencies
 node_modules
 
@@ -18,4 +19,6 @@ build
 
 npm-debug.log*
 
+#app
 db.sqlite
+certs/*.pem
