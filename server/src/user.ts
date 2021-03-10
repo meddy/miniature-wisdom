@@ -9,20 +9,16 @@ export interface User {
 }
 
 export function findAdmin(): User {
-  return db
-    .prepare("SELECT rowid AS id, * FROM users WHERE is_admin = 1")
-    .get();
+  return db.prepare("SELECT * FROM users WHERE is_admin = 1").get();
 }
 
-export function upsertAdmin(
-  username: string,
-  password: string,
-  rowid?: number
-) {
-  if (rowid) {
-    db.prepare(
-      "UPDATE users SET username = ?, password = ? WHERE rowid = ?"
-    ).run(username, hashPassword(password), rowid);
+export function upsertAdmin(username: string, password: string, id?: number) {
+  if (id) {
+    db.prepare("UPDATE users SET username = ?, password = ? WHERE id = ?").run(
+      username,
+      hashPassword(password),
+      id
+    );
   } else {
     db.prepare(
       "INSERT INTO users (username, password, is_admin) VALUES (?, ?, TRUE)"
