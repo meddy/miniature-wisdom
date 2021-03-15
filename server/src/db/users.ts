@@ -1,14 +1,14 @@
 import crypto from "crypto";
-import db from "./db";
+import db from "./";
 
-export interface User {
+export interface Users {
   id: number;
   username: string;
   password: string;
   is_admin: boolean;
 }
 
-export function findAdmin(): User {
+export function findAdmin(): Users {
   return db.prepare("SELECT * FROM users WHERE is_admin = 1").get();
 }
 

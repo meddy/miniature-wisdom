@@ -7,7 +7,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import cookieSession from "cookie-session";
 
-import { User as LocalUser, findAdmin, verifyPassword } from "./user";
+import { Users as LocalUser, findAdmin, verifyPassword } from "./db/users";
 
 // https://github.com/DefinitelyTyped/DefinitelyTyped/pull/49723
 declare module "passport" {
@@ -58,32 +58,6 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.post(
-  "/sign-in",
-  passport.authenticate("local", { failureRedirect: "login" })
-);
-
-// create tag (name) (parent_id) (must be unique)
-// update tag (name) (must be unique)
-// delete tag (id)
-// list tags (get child tags)
-// list tags by parent id
-
-// create document (title, content, is public, tags, files)
-// update document (title, content, is public, tags, files)
-// delete document (id)
-// list all documents (get related tags)
-// list documents by tag (get related tags)
-
-// search (text)
-// results
-
-// delete file (file)
-// list files (get related documents)
-
-// create user on startup
-// or create user through cli
 
 const server = https.createServer(
   {

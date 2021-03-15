@@ -1,5 +1,5 @@
 import readline from "readline";
-import { findAdmin, upsertAdmin } from "./user";
+import { findAdmin, upsertAdmin } from "../db/users";
 
 const rl = readline.createInterface({
   input: process.stdin,

@@ -20,7 +20,7 @@ END;
 CREATE TABLE tags (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL UNIQUE,
-    parent_id INTEGER NOT NULL DEFAULT 0,
+    parent_id INTEGER,
     is_public BOOLEAN NOT NULL DEFAULT FALSE,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
@@ -38,23 +38,27 @@ BEGIN
     UPDATE tags SET updated_at = CURRENT_TIMESTAMP WHERE id = NEW.id;
 END;
 
-CREATE VIRTUAL TABLE tags_search USING fts5(name, content='tags');
+CREATE VIRTUAL TABLE tags_search USING fts5(
+    name,
+    content='tags',
+    content_rowid='id'
+);
 
 CREATE TRIGGER tags_search_inserted AFTER INSERT ON tags BEGIN
-    INSERT INTO tags_search(id, name)
+    INSERT INTO tags_search(rowid, name)
     VALUES (new.id, new.name);
 END;
 
 CREATE TRIGGER tags_search_deleted AFTER DELETE ON tags BEGIN
-    INSERT INTO tags_search(tags_search, id, name)
+    INSERT INTO tags_search(tags_search, rowid, name)
     VALUES('delete', old.id, old.name);
 END;
 
 CREATE TRIGGER tags_search_updated AFTER UPDATE ON tags BEGIN
-    INSERT INTO tags_search(tags_search, id, name)
+    INSERT INTO tags_search(tags_search, rowid, name)
     VALUES('delete', old.id, old.name);
 
-    INSERT INTO tags_search(id, name)
+    INSERT INTO tags_search(rowid, name)
     VALUES (new.id, new.name);
 END;
 
@@ -81,24 +85,29 @@ BEGIN
     UPDATE documents SET updated_at = CURRENT_TIMESTAMP WHERE id = new.id;
 END;
 
-CREATE VIRTUAL TABLE documents_search USING fts5(title, content_raw, content='documents');
+CREATE VIRTUAL TABLE documents_search USING fts5(
+    title,
+    content_raw,
+    content='documents',
+    content_rowid='id'
+);
 
 CREATE TRIGGER documents_search_inserted AFTER INSERT ON documents BEGIN
-    INSERT INTO documents_search(id, title, content_raw)
+    INSERT INTO documents_search(rowid, title, content_raw)
     VALUES (new.id, new.title, new.content_raw);
 END;
 
 CREATE TRIGGER documents_search_deleted AFTER DELETE ON documents BEGIN
-    INSERT INTO documents_search(tags_search, id, title, content_raw)
+    INSERT INTO documents_search(documents_search, rowid, title, content_raw)
     VALUES('delete', old.id, old.title, old.content_raw);
 END;
 
 CREATE TRIGGER documents_search_updated AFTER UPDATE ON documents BEGIN
-    INSERT INTO documents_search(tags_search, id, title, content_raw)
+    INSERT INTO documents_search(documents_search, rowid, title, content_raw)
     VALUES('delete', old.id, old.title, old.content_raw);
 
-    INSERT INTO documents_search(id, title, content_raw)
-    VALUES (new.id, new.name, new.content_raw);
+    INSERT INTO documents_search(rowid, title, content_raw)
+    VALUES (new.id, new.title, new.content_raw);
 END;
 
 CREATE TABLE documents_tags (
@@ -125,22 +134,26 @@ CREATE TABLE files (
 
 CREATE INDEX files_document_index ON files(document_id);
 
-CREATE VIRTUAL TABLE files_search USING fts5(filename, content='files');
+CREATE VIRTUAL TABLE files_search USING fts5(
+    filename,
+    content='files',
+    content_rowid='id'
+);
 
-CREATE TRIGGER files_search_inserted AFTER INSERT ON tags BEGIN
-    INSERT INTO files_search(id, filename)
+CREATE TRIGGER files_search_inserted AFTER INSERT ON files BEGIN
+    INSERT INTO files_search(rowid, filename)
     VALUES (new.id, new.filename);
 END;
 
-CREATE TRIGGER files_search_deleted AFTER DELETE ON tags BEGIN
-    INSERT INTO files_search(tags_search, id, filename)
+CREATE TRIGGER files_search_deleted AFTER DELETE ON files BEGIN
+    INSERT INTO files_search(files_search, rowid, filename)
     VALUES('delete', old.id, old.filename);
 END;
 
-CREATE TRIGGER files_search_updated AFTER UPDATE ON tags BEGIN
-    INSERT INTO files_search(tags_search, id, filename)
+CREATE TRIGGER files_search_updated AFTER UPDATE ON files BEGIN
+    INSERT INTO files_search(files_search, rowid, filename)
     VALUES('delete', old.id, old.filename);
 
-    INSERT INTO files_search(id, filename)
+    INSERT INTO files_search(rowid, filename)
     VALUES (new.id, new.filename);
 END;
