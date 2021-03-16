@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import yup, { BaseSchema } from "yup";
 
-import { createTag, updateTag } from "../db/tags";
+import { createTag, deleteTag, updateTag } from "../db/tags";
 
 const router = express.Router();
 
@@ -65,8 +65,13 @@ router.patch("/tags/:tagId", validate(tagSchema), (req, res) => {
   }
 });
 
-router.delete("/tags/:tagId", (req, res) => {});
+router.delete("/tags/:tagId", async (req, res, next) => {
+  await deleteTag(Number(req.params.tagId));
+  next();
+});
 
-router.get("/tags", (req, res) => {});
+router.get("/tags", (req, res) => {
+  // load them all, but also include children recursively?
+});
 
 export default router;
