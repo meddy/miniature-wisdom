@@ -1,8 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
-import passport from "passport";
 import yup, { BaseSchema } from "yup";
 
-import { createTag, deleteTag, updateTag } from "../db/tags";
+import { createTag, deleteTag, fetchAll, updateTag } from "../db/tags";
 
 const router = express.Router();
 
@@ -24,11 +23,6 @@ const tagSchema = yup.object({
   name: yup.string().required(),
   parentId: yup.number(),
 });
-
-router.post(
-  "/sessions",
-  passport.authenticate("local", { failureRedirect: "login" })
-);
 
 router.post("/tags", validate(tagSchema), (req, res) => {
   try {
@@ -66,12 +60,16 @@ router.patch("/tags/:tagId", validate(tagSchema), (req, res) => {
 });
 
 router.delete("/tags/:tagId", async (req, res, next) => {
-  await deleteTag(Number(req.params.tagId));
-  next();
+  try {
+    await deleteTag(Number(req.params.tagId));
+    res.send(200);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get("/tags", (req, res) => {
-  // load them all, but also include children recursively?
+  res.status(200).send(fetchAll());
 });
 
 export default router;

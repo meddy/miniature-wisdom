@@ -1,5 +1,4 @@
 import db from "./";
-import { buildParams } from "./util";
 
 export interface Tag {
   id: number;
@@ -15,6 +14,10 @@ export function find(id: number): Tag {
 
 export function findByParent(parentId: number): Tag[] {
   return db.prepare("SELECT * from tags WHERE parent_id = ?").all(parentId);
+}
+
+export function fetchAll(): Tag[] {
+  return db.prepare("SELECT * from tags").all();
 }
 
 export function createTag(name: string, parentId?: number): Tag {
