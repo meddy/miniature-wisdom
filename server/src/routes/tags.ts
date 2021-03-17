@@ -24,7 +24,7 @@ const tagSchema = yup.object({
   parentId: yup.number(),
 });
 
-router.post("/tags", validate(tagSchema), (req, res) => {
+router.post("/", validate(tagSchema), (req, res) => {
   try {
     const tag = createTag(req.body.name, req.body.parentId);
     res.status(201).json(tag);
@@ -38,7 +38,7 @@ router.post("/tags", validate(tagSchema), (req, res) => {
   }
 });
 
-router.patch("/tags/:tagId", validate(tagSchema), (req, res) => {
+router.patch("/:tagId", validate(tagSchema), (req, res) => {
   try {
     const tag = updateTag(
       Number(req.params.tagId),
@@ -59,7 +59,7 @@ router.patch("/tags/:tagId", validate(tagSchema), (req, res) => {
   }
 });
 
-router.delete("/tags/:tagId", async (req, res, next) => {
+router.delete("/:tagId", async (req, res, next) => {
   try {
     await deleteTag(Number(req.params.tagId));
     res.send(200);
@@ -68,7 +68,7 @@ router.delete("/tags/:tagId", async (req, res, next) => {
   }
 });
 
-router.get("/tags", (req, res) => {
+router.get("/", (req, res) => {
   res.status(200).send(fetchAll());
 });
 

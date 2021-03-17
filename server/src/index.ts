@@ -8,8 +8,8 @@ import { Strategy as LocalStrategy } from "passport-local";
 import cookieSession from "cookie-session";
 
 import { Users as LocalUser, findAdmin, verifyPassword } from "./db/users";
+import { tags, users } from "./routes";
 
-// https://github.com/DefinitelyTyped/DefinitelyTyped/pull/49723
 declare module "passport" {
   namespace Express {
     interface User extends LocalUser {}
@@ -58,6 +58,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/tags", tags);
+app.use("/users", users);
 
 const server = https.createServer(
   {

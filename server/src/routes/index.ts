@@ -1,4 +1,5 @@
 export { default as tags } from "./tags";
+export { default as users } from "./users";
 
 // create tag (name) (parent_id) (must be unique)
 // update tag (name) (must be unique)
