@@ -7,7 +7,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import cookieSession from "cookie-session";
 
-import { Users as LocalUser, findAdmin, verifyPassword } from "./db/users";
+import { User as LocalUser, findAdmin, verifyPassword } from "./db/user";
 import { tags, users } from "./routes";
 
 declare module "passport" {
@@ -21,6 +21,7 @@ passport.use(
     try {
       const admin = findAdmin();
       if (
+        admin &&
         username === admin.username &&
         verifyPassword(password, admin.password)
       ) {

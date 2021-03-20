@@ -1,28 +1,18 @@
-import express, { Request, Response, NextFunction } from "express";
-import yup, { BaseSchema } from "yup";
+import express from "express";
+import yup from "yup";
 
 import { createTag, deleteTag, fetchAll, updateTag } from "../db/tags";
-
-const router = express.Router();
-
-const validate = (schema: BaseSchema) => async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    await schema.validate(req.body);
-    next();
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ error: err.errors.join(", ") });
-  }
-};
+import validate from "../middleware/validate";
+import { checkAuthenticated } from "../middleware/auth";
 
 const tagSchema = yup.object({
   name: yup.string().required(),
   parentId: yup.number(),
 });
+
+const router = express.Router();
+
+router.use(checkAuthenticated);
 
 router.post("/", validate(tagSchema), (req, res) => {
   try {
@@ -62,14 +52,14 @@ router.patch("/:tagId", validate(tagSchema), (req, res) => {
 router.delete("/:tagId", async (req, res, next) => {
   try {
     await deleteTag(Number(req.params.tagId));
-    res.send(200);
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }
 });
 
 router.get("/", (req, res) => {
-  res.status(200).send(fetchAll());
+  res.status(200).json(fetchAll());
 });
 
 export default router;
