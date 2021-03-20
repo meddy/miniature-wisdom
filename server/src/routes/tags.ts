@@ -1,5 +1,5 @@
 import express from "express";
-import yup from "yup";
+import * as yup from "yup";
 
 import { createTag, deleteTag, fetchAll, updateTag } from "../db/tags";
 import validate from "../middleware/validate";

@@ -1,8 +1,8 @@
 import express from "express";
 import passport from "passport";
-import yup from "yup";
+import * as yup from "yup";
 
-import { findAdmin, upsertAdmin, User } from "../db/user";
+import { findAdmin, upsertAdmin } from "../db/user";
 import validate from "../middleware/validate";
 
 const router = express.Router();

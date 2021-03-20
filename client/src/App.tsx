@@ -10,10 +10,14 @@ function App() {
   // get admin
   // if no admin -> create admin
   // if admin but not authenticated -> login
-  const { isLoading, error, data } = useQuery("user", async () => {
+  const { isLoading, error, data } = useQuery("admin", async () => {
     const response = await fetch("/api/users/admin");
     return response.json();
   });
+
+  console.log(isLoading);
+  console.log(error);
+  console.log(data);
 
   return (
     <BrowserRouter>
