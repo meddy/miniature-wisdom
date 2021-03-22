@@ -10,7 +10,7 @@
   },
   "workspaces": [
     "client",
-    "server"
-  ],
-  "proxy": "http://localhost:4000"
+    "server",
+    "lib"
+  ]
 }

@@ -1,12 +1,5 @@
+import { Tag } from "minature-wisdom-lib/models";
 import db from "./";
-
-export interface Tag {
-  id: number;
-  name: string;
-  parent_id?: number;
-  created_at: string;
-  updated_at: string;
-}
 
 export function find(id: number): Tag {
   return db.prepare("SELECT * FROM tags WHERE id = ?").get(id);

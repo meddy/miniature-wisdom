@@ -1,8 +1,9 @@
 import express from "express";
 import passport from "passport";
 import * as yup from "yup";
+import * as messages from "minature-wisdom-lib/messages";
 
-import { findAdmin, upsertAdmin } from "../db/user";
+import { findAdmin, upsertAdmin } from "../db/users";
 import validate from "../middleware/validate";
 
 const router = express.Router();
@@ -18,9 +19,9 @@ const userCredsSchema = yup.object({
 router.get("/admin", (req, res) => {
   const admin = findAdmin();
   if (!admin) {
-    res.status(200).json({});
+    res.status(404).json({ error: messages.ADMIN_UNDEFINED });
   } else if (!req.isAuthenticated()) {
-    res.sendStatus(401);
+    res.status(401).json({ error: messages.UNAUTHENTICATED });
   } else {
     res.status(200).json(admin);
   }
@@ -29,7 +30,7 @@ router.get("/admin", (req, res) => {
 router.post("/admin", validate(userCredsSchema), (req, res, next) => {
   const admin = findAdmin();
   if (typeof admin === "undefined") {
-    res.status(400).json({ error: "Admin already defined" });
+    res.status(400).json({ error: messages.ADMIN_ALREADY_DEFINED });
   } else {
     upsertAdmin(req.body.username, req.body.password);
 

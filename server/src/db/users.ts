@@ -1,12 +1,6 @@
+import { User } from "minature-wisdom-lib/models";
 import crypto from "crypto";
 import db from "./";
-
-export interface User {
-  id: number;
-  username: string;
-  password: string;
-  is_admin: boolean;
-}
 
 export function findAdmin(): User | undefined {
   return db.prepare("SELECT * FROM users WHERE is_admin = 1").get();

@@ -7,7 +7,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import cookieSession from "cookie-session";
 
-import { User as LocalUser, findAdmin, verifyPassword } from "./db/user";
+import { User as LocalUser, findAdmin, verifyPassword } from "./db/users";
 import { tags, users } from "./routes";
 
 declare module "passport" {
@@ -59,8 +59,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/tags", tags);
-app.use("/users", users);
+app.use("/api/tags", tags);
+app.use("/api/users", users);
 
 const server = https.createServer(
   {
