@@ -1,5 +1,5 @@
-import { BaseSchema } from "yup";
 import { NextFunction, Request, Response } from "express";
+import { BaseSchema } from "yup";
 
 const validate = (schema: BaseSchema) => async (
   req: Request,

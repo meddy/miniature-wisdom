@@ -1,13 +1,14 @@
+import cookieSession from "cookie-session";
 import crypto from "crypto";
 import express from "express";
-import https from "https";
 import fs from "fs";
-import path from "path";
+import https from "https";
+import { User as LocalUser } from "minature-wisdom-lib/models";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import cookieSession from "cookie-session";
+import path from "path";
 
-import { User as LocalUser, findAdmin, verifyPassword } from "./db/users";
+import { findAdmin, verifyPassword } from "./db/users";
 import { tags, users } from "./routes";
 
 declare module "passport" {

@@ -1,5 +1,6 @@
-import { User } from "minature-wisdom-lib/models";
 import crypto from "crypto";
+import { User } from "minature-wisdom-lib/models";
+
 import db from "./";
 
 export function findAdmin(): User | undefined {

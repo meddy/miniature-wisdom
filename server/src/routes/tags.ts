@@ -2,8 +2,8 @@ import express from "express";
 import * as yup from "yup";
 
 import { createTag, deleteTag, fetchAll, updateTag } from "../db/tags";
-import validate from "../middleware/validate";
 import { checkAuthenticated } from "../middleware/auth";
+import validate from "../middleware/validate";
 
 const tagSchema = yup.object({
   name: yup.string().required(),

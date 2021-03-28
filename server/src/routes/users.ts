@@ -1,7 +1,7 @@
 import express from "express";
+import * as messages from "minature-wisdom-lib/messages";
 import passport from "passport";
 import * as yup from "yup";
-import * as messages from "minature-wisdom-lib/messages";
 
 import { findAdmin, upsertAdmin } from "../db/users";
 import validate from "../middleware/validate";

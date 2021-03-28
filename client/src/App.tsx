@@ -1,11 +1,16 @@
+import CssBaseline from "@material-ui/core/CssBaseline";
+import * as messages from "minature-wisdom-lib/messages";
 import React from "react";
 import { useQuery } from "react-query";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import * as messages from "minature-wisdom-lib/messages";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import SignIn from "./SignIn";
 import Home from "./Home";
+import SignIn from "./SignIn";
+
+// disable eslint plugin
+// apply eslint at lowest level
+// full stack spa starter?
+// handle eslint through husky and PHP storm
 
 function App() {
   // get admin

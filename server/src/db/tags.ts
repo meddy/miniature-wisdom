@@ -1,4 +1,5 @@
 import { Tag } from "minature-wisdom-lib/models";
+
 import db from "./";
 
 export function find(id: number): Tag {

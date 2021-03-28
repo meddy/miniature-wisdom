@@ -1,6 +1,6 @@
+import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
-import Database from "better-sqlite3";
 
 const db = new Database(path.resolve("./src/db/db.sqlite"), {
   verbose: process.env.NODE_ENV === "production" ? console.log : undefined,
