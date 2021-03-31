@@ -1,8 +1,10 @@
+import CssBaseline from "@material-ui/core/CssBaseline";
 import React from "react";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter } from "react-router-dom";
 
-import App from "./App";
+import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 
 const queryClient = new QueryClient();
@@ -10,7 +12,10 @@ const queryClient = new QueryClient();
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <BrowserRouter>
+        <CssBaseline />
+        <App />
+      </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")

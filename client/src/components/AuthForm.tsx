@@ -29,7 +29,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+interface AuthFormProps {
+  title: string;
+  submitLabel?: string;
+}
+
+export default function AuthForm(props: AuthFormProps) {
+  const { title, submitLabel } = props;
   const classes = useStyles();
 
   return (
@@ -39,7 +45,7 @@ export default function SignIn() {
           <LockOutlined />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign In
+          {title}
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -71,7 +77,7 @@ export default function SignIn() {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            {submitLabel ?? title}
           </Button>
         </form>
       </div>
