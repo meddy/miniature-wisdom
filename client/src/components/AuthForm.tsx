@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { LockOutlined } from "@material-ui/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,13 +39,24 @@ interface AuthFormProps {
   submitLabel?: string;
   onSubmit: (credentials: Credentials) => void;
   loading: boolean;
+  errors?: {
+    username?: string;
+    password?: string;
+  };
 }
 
 export default function AuthForm(props: AuthFormProps) {
-  const { title, submitLabel, onSubmit, loading } = props;
+  const { title, submitLabel, onSubmit, loading, errors } = props;
   const classes = useStyles();
   const [username, setUsername] = useState("");
+  const [usernameError, setUsernameError] = useState(errors?.username);
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(errors?.password);
+
+  useEffect(() => {
+    setUsernameError(errors?.username);
+    setPasswordError(errors?.password);
+  }, [errors]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -65,40 +76,50 @@ export default function AuthForm(props: AuthFormProps) {
           }}
         >
           <TextField
-            disabled={loading}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
             autoComplete="username"
             autoFocus
+            disabled={loading}
+            error={!!usernameError}
+            fullWidth
+            helperText={usernameError}
+            id="username"
+            label="Username"
+            margin="normal"
+            name="username"
+            onChange={(event) => {
+              setUsername(event.target.value);
+              setUsernameError(undefined);
+            }}
+            required
             value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            variant="outlined"
           />
           <TextField
-            disabled={loading}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
             autoComplete="on"
+            disabled={loading}
+            error={!!passwordError}
+            fullWidth
+            helperText={passwordError}
+            id="password"
+            label="Password"
+            margin="normal"
+            name="password"
+            onChange={(event) => {
+              setPassword(event.target.value);
+              setPasswordError(undefined);
+            }}
+            required
+            type="password"
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            variant="outlined"
           />
           <Button
-            disabled={loading}
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
             className={classes.submit}
+            color="primary"
+            disabled={loading}
+            fullWidth
+            type="submit"
+            variant="contained"
           >
             {submitLabel ?? title}
           </Button>

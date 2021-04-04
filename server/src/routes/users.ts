@@ -23,29 +23,31 @@ router.get("/admin", (req, res) => {
   } else if (!req.isAuthenticated()) {
     res.status(401).json({ error: messages.UNAUTHENTICATED });
   } else {
-    res.status(200).json(admin);
+    res.status(200).json({ data: { ...admin, password: undefined } });
   }
 });
 
 router.post("/admin", validate(userCredsSchema), (req, res, next) => {
-  const admin = findAdmin();
-  if (typeof admin === "undefined") {
-    res.status(400).json({ error: messages.ADMIN_ALREADY_DEFINED });
-  } else {
-    upsertAdmin(req.body.username, req.body.password);
-
-    req.login(admin, (err) => {
-      if (err) {
-        next(err);
-      }
-
-      res.status(200).json(admin);
-    });
+  if (findAdmin()) {
+    return res.status(400).json({ error: messages.ADMIN_ALREADY_DEFINED });
   }
+
+  const admin = upsertAdmin(req.body.username, req.body.password);
+  if (!admin) {
+    return next(new Error("Failed to create admin"));
+  }
+
+  req.login(admin, (err) => {
+    if (err) {
+      next(err);
+    }
+
+    res.status(200).json({ data: admin });
+  });
 });
 
 router.post("/session", passport.authenticate("local"), (req, res) => {
-  res.status(201).json(findAdmin());
+  res.status(201).json({ data: findAdmin() });
 });
 
 router.delete("/session", (req, res) => {

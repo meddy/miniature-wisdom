@@ -1,20 +1,21 @@
 import React from "react";
 import { useMutation } from "react-query";
 
-import { post } from "../util/api";
+import { ApiError, post } from "../util/api";
 import AuthForm, { Credentials } from "./AuthForm";
 
 export default function CreateAdmin() {
-  const { isLoading, mutate } = useMutation<any, Error, Credentials>(
+  const { isLoading, mutate, error } = useMutation<any, ApiError, Credentials>(
     (credentials) => post("/api/users/admin", credentials)
   );
 
   return (
     <AuthForm
+      errors={error?.messages}
       loading={isLoading}
-      title="Setup"
-      submitLabel="Create Admin Account"
       onSubmit={mutate}
+      submitLabel="Create Admin Account"
+      title="Setup"
     />
   );
 }

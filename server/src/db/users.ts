@@ -19,6 +19,8 @@ export function upsertAdmin(username: string, password: string, id?: number) {
       "INSERT INTO users (username, password, is_admin) VALUES (?, ?, TRUE)"
     ).run(username, hashPassword(password));
   }
+
+  return findAdmin();
 }
 
 function hashPassword(password: string) {

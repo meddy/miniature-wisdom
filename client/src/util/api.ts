@@ -1,7 +1,7 @@
 export class ApiError extends Error {
   messages;
 
-  constructor(generalMessage: string, messages?: Record<string, string[]>) {
+  constructor(generalMessage: string, messages?: Record<string, string>) {
     super(generalMessage);
     this.messages = messages;
   }
@@ -33,17 +33,17 @@ async function doFetch<TData>(
   type JSONResponse = {
     data?: TData;
     error?: string;
-    errors?: Record<string, string[]>;
+    errors?: Record<string, string>;
   };
 
-  const data: JSONResponse = await response.json();
+  const { data, error, errors }: JSONResponse = await response.json();
   if (!response.ok) {
-    if (data.errors) {
-      throw new ApiError("payload error", data.errors);
+    if (errors) {
+      throw new ApiError("validation error", errors);
     }
 
-    if (data.error) {
-      throw new ApiError(data.error);
+    if (error) {
+      throw new ApiError(error);
     }
   }
 

@@ -7,6 +7,7 @@ const validate = (schema: BaseSchema) => async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.body);
     await schema.validate(req.body, { abortEarly: false });
     next();
   } catch (err) {
@@ -21,7 +22,7 @@ const validate = (schema: BaseSchema) => async (
           return acc;
         }
 
-        return { ...acc, [err.path]: err.errors };
+        return { ...acc, [err.path]: err.errors.join(" ") };
       }, {});
     } else if (err.path) {
       messageMap = { [err.path]: err.errors };
