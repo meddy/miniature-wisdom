@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { LockOutlined } from "@material-ui/icons";
-import React from "react";
+import React, { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -29,14 +29,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export interface Credentials {
+  username: string;
+  password: string;
+}
+
 interface AuthFormProps {
   title: string;
   submitLabel?: string;
+  onSubmit: (credentials: Credentials) => void;
+  loading: boolean;
 }
 
 export default function AuthForm(props: AuthFormProps) {
-  const { title, submitLabel } = props;
+  const { title, submitLabel, onSubmit, loading } = props;
   const classes = useStyles();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <Container component="main" maxWidth="xs">
@@ -47,8 +56,16 @@ export default function AuthForm(props: AuthFormProps) {
         <Typography component="h1" variant="h5">
           {title}
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmit({ username, password });
+          }}
+        >
           <TextField
+            disabled={loading}
             variant="outlined"
             margin="normal"
             required
@@ -58,8 +75,11 @@ export default function AuthForm(props: AuthFormProps) {
             name="username"
             autoComplete="username"
             autoFocus
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
           />
           <TextField
+            disabled={loading}
             variant="outlined"
             margin="normal"
             required
@@ -69,8 +89,11 @@ export default function AuthForm(props: AuthFormProps) {
             type="password"
             id="password"
             autoComplete="on"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
           />
           <Button
+            disabled={loading}
             type="submit"
             fullWidth
             variant="contained"

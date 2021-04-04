@@ -3,6 +3,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 
+import { ApiError, get } from "../util/api";
 import AppLoading from "./AppLoading";
 import Home from "./Home";
 import SignIn from "./SignIn";
@@ -11,17 +12,9 @@ import SignUp from "./SignUp";
 export default function App() {
   const { pathname: path } = useLocation();
 
-  const { isLoading, isError, error, data: user } = useQuery<any, Error>(
+  const { isLoading, isError, error, data: user } = useQuery<any, ApiError>(
     "admin",
-    async () => {
-      const response = await fetch("/api/users/admin");
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error);
-      }
-
-      return data;
-    },
+    () => get("/api/users/admin"),
     { retry: false }
   );
 
