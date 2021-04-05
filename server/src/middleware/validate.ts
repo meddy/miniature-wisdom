@@ -7,7 +7,6 @@ const validate = (schema: BaseSchema) => async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.body);
     await schema.validate(req.body, { abortEarly: false });
     next();
   } catch (err) {

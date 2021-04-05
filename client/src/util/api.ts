@@ -22,6 +22,10 @@ async function doFetch<TData>(
 
   const response = await fetch(`/api/${endpoint}`, options);
 
+  if (method === "DELETE") {
+    return;
+  }
+
   type JSONResponse = {
     data?: TData;
     error?: string;

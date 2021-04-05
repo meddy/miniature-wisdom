@@ -42,7 +42,7 @@ router.post("/admin", validate(userCredsSchema), (req, res, next) => {
       next(err);
     }
 
-    res.status(200).json({ data: admin });
+    res.status(200).json({ data: { ...admin, password: undefined } });
   });
 });
 

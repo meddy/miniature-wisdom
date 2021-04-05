@@ -5,8 +5,8 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
-import React from "react";
-import { useMutation } from "react-query";
+import React, { useEffect } from "react";
+import { useMutation, useQueryClient } from "react-query";
 
 import api, { ApiError } from "../util/api";
 
@@ -19,11 +19,18 @@ const useStyles = makeStyles((theme) => ({
 export default function Home() {
   const classes = useStyles();
 
-  const { isLoading: isLoggingOut, mutate: logout } = useMutation<
-    void,
-    ApiError,
-    void
-  >(() => api.delete("/users/session"));
+  const {
+    isLoading: isLoggingOut,
+    mutate: logout,
+    isSuccess: loggedOut,
+  } = useMutation<void, ApiError, void>(() => api.delete("/users/session"));
+
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (loggedOut) {
+      queryClient.setQueryData("admin", undefined);
+    }
+  }, [loggedOut, queryClient]);
 
   return (
     <>

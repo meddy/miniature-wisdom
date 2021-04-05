@@ -1,13 +1,22 @@
-import React from "react";
-import { useMutation } from "react-query";
+import React, { useEffect } from "react";
+import { useMutation, useQueryClient } from "react-query";
 
 import api, { ApiError } from "../util/api";
 import AuthForm, { Credentials } from "./AuthForm";
 
 export default function CreateAdmin() {
-  const { isLoading, mutate, error } = useMutation<any, ApiError, Credentials>(
-    (credentials) => api.post("/users/admin", credentials)
-  );
+  const { data, isLoading, mutate, error } = useMutation<
+    any,
+    ApiError,
+    Credentials
+  >((credentials) => api.post("/users/admin", credentials));
+
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (data) {
+      queryClient.setQueryData("admin", data);
+    }
+  }, [data, queryClient]);
 
   return (
     <AuthForm
