@@ -3,8 +3,9 @@ import { User } from "minature-wisdom-lib/models";
 
 import db from "./";
 
-export function findAdmin(): User | undefined {
-  return db.prepare("SELECT * FROM users WHERE is_admin = 1").get();
+export function findAdmin(hidePassword: boolean = true): User | undefined {
+  const user = db.prepare("SELECT * FROM users WHERE is_admin = 1").get();
+  return user && hidePassword ? { ...user, password: undefined } : user;
 }
 
 export function upsertAdmin(username: string, password: string, id?: number) {

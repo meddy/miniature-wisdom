@@ -20,7 +20,7 @@ declare module "passport" {
 passport.use(
   new LocalStrategy((username, password, verify) => {
     try {
-      const admin = findAdmin();
+      const admin = findAdmin(false);
       if (
         admin &&
         username === admin.username &&
@@ -41,7 +41,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   try {
-    return done(null, findAdmin());
+    return done(null, findAdmin(false));
   } catch (err) {
     done(err);
   }

@@ -23,7 +23,7 @@ router.get("/admin", (req, res) => {
   } else if (!req.isAuthenticated()) {
     res.status(401).json({ error: messages.UNAUTHENTICATED });
   } else {
-    res.status(200).json({ data: { ...admin, password: undefined } });
+    res.status(200).json({ data: admin });
   }
 });
 
@@ -42,7 +42,7 @@ router.post("/admin", validate(userCredsSchema), (req, res, next) => {
       next(err);
     }
 
-    res.status(200).json({ data: { ...admin, password: undefined } });
+    res.status(200).json({ data: admin });
   });
 });
 
