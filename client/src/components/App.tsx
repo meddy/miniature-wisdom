@@ -22,6 +22,8 @@ export default function App() {
     return <AppLoading />;
   }
 
+  console.log(isError, error, user);
+
   return (
     <Switch>
       {isError &&

@@ -29,6 +29,7 @@ export default function Home() {
   useEffect(() => {
     if (loggedOut) {
       queryClient.setQueryData("admin", undefined);
+      queryClient.invalidateQueries("admin");
     }
   }, [loggedOut, queryClient]);
 
