@@ -7,17 +7,9 @@ export class ApiError extends Error {
   }
 }
 
-export function get<TData>(url: string) {
-  return doFetch<TData>(url, "GET");
-}
-
-export function post<TData>(url: string, body: object) {
-  return doFetch<TData>(url, "POST", body);
-}
-
 async function doFetch<TData>(
-  url: string,
-  method: "GET" | "POST",
+  endpoint: string,
+  method: "GET" | "POST" | "DELETE",
   body?: object
 ) {
   const options: RequestInit = { method };
@@ -28,7 +20,7 @@ async function doFetch<TData>(
     options.body = JSON.stringify(body);
   }
 
-  const response = await fetch(url, options);
+  const response = await fetch(`/api/${endpoint}`, options);
 
   type JSONResponse = {
     data?: TData;
@@ -49,3 +41,19 @@ async function doFetch<TData>(
 
   return data;
 }
+
+const api = {
+  get<TData>(url: string) {
+    return doFetch<TData>(url, "GET");
+  },
+
+  post<TData>(url: string, body: object) {
+    return doFetch<TData>(url, "POST", body);
+  },
+
+  delete(url: string) {
+    return doFetch<void>(url, "DELETE");
+  },
+};
+
+export default api;

@@ -3,7 +3,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 
-import { ApiError, get } from "../util/api";
+import api, { ApiError } from "../util/api";
 import AppLoading from "./AppLoading";
 import Home from "./Home";
 import SignIn from "./SignIn";
@@ -14,7 +14,7 @@ export default function App() {
 
   const { isLoading, isError, error, data: user } = useQuery<any, ApiError>(
     "admin",
-    () => get("/api/users/admin"),
+    () => api.get("/users/admin"),
     { retry: false }
   );
 
@@ -31,9 +31,9 @@ export default function App() {
         error?.message === messages.UNAUTHENTICATED &&
         path !== "/sign-in" && <Redirect to="/sign-in" />}
       {user && ["/sign-up", "/sign-in"].includes(path) && <Redirect to="/" />}
-      <Route exact path="/" component={Home} />
-      <Route path="/sign-in" component={SignIn} />
-      <Route path="/sign-up" component={SignUp} />
+      <Route component={Home} exact path="/" />
+      <Route component={SignIn} path="/sign-in" />
+      <Route component={SignUp} path="/sign-up" />
     </Switch>
   );
 }
