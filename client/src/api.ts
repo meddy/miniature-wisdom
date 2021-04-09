@@ -7,7 +7,7 @@ export class ApiError extends Error {
   }
 }
 
-async function doFetch<TData>(
+async function makeRequest<TData>(
   endpoint: string,
   method: "GET" | "POST" | "DELETE",
   body?: object
@@ -48,15 +48,15 @@ async function doFetch<TData>(
 
 const api = {
   get<TData>(url: string) {
-    return doFetch<TData>(url, "GET");
+    return makeRequest<TData>(url, "GET");
   },
 
   post<TData>(url: string, body: object) {
-    return doFetch<TData>(url, "POST", body);
+    return makeRequest<TData>(url, "POST", body);
   },
 
   delete(url: string) {
-    return doFetch<void>(url, "DELETE");
+    return makeRequest<void>(url, "DELETE");
   },
 };
 

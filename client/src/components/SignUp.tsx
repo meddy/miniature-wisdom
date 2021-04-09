@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useMutation, useQueryClient } from "react-query";
 
-import api, { ApiError } from "../util/api";
+import api, { ApiError } from "../api";
 import AuthForm, { Credentials } from "./AuthForm";
 
 export default function CreateAdmin() {

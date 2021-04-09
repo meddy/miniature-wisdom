@@ -3,7 +3,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 
-import api, { ApiError } from "../util/api";
+import api, { ApiError } from "../api";
 import AppLoading from "./AppLoading";
 import Home from "./Home";
 import SignIn from "./SignIn";
@@ -21,8 +21,6 @@ export default function App() {
   if (isLoading) {
     return <AppLoading />;
   }
-
-  console.log(isError, error, user);
 
   return (
     <Switch>
